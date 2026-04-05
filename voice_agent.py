@@ -16,7 +16,8 @@ and NLU, run ``main.py`` instead:
 """
 
 # Re-export public helpers from the new modules so that any code that imports
-# from this file directly continues to work.
+# from this file directly continues to work without modification.
+# listen, speak, build_recognizer, and HELP_TEXT are intentionally exported.
 from listener import build_recognizer, listen, speak  # noqa: F401
 from command_processor import process_command as _process_command_new, HELP_TEXT  # noqa: F401
 import speech_recognition as sr

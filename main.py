@@ -26,26 +26,28 @@ import speech_recognition as sr
 
 from command_processor import process_command
 from config import ACTIVATION_TIMEOUT, WAKE_WORD
-from listener import build_recognizer, listen, speak
+from listener import build_recognizer, speak
 from logger import setup_logger
 from wake_word import WakeWordDetector
 
 logger = setup_logger("main")
 
 # ---------------------------------------------------------------------------
-# Shared state between main thread and wake-word callback
+# Shared state between main thread and wake-word callback.
+# Using a dict so closures can mutate the value without 'global'.
 # ---------------------------------------------------------------------------
 
-_activation_event = threading.Event()   # set when wake word heard
-_active_until: float = 0.0              # epoch time when activation expires
+_state = {
+    "activation_event": threading.Event(),  # set when wake word heard
+    "active_until": 0.0,                    # epoch time when activation expires
+}
 
 
 def _on_wake_word() -> None:
     """Callback invoked by the WakeWordDetector background thread."""
-    global _active_until
     logger.info("Wake word callback fired.")
-    _active_until = time.time() + ACTIVATION_TIMEOUT
-    _activation_event.set()
+    _state["active_until"] = time.time() + ACTIVATION_TIMEOUT
+    _state["activation_event"].set()
 
 
 # ---------------------------------------------------------------------------
@@ -61,6 +63,7 @@ def main() -> None:
     )
 
     recognizer = build_recognizer()
+    activation_event: threading.Event = _state["activation_event"]
 
     # Start background wake-word detector
     detector = WakeWordDetector(wake_word=WAKE_WORD, on_detected=_on_wake_word)
@@ -80,14 +83,14 @@ def main() -> None:
 
         while True:
             # ---- Idle: wait for wake word --------------------------------
-            if not _activation_event.is_set():
-                _activation_event.wait(timeout=0.5)
+            if not activation_event.is_set():
+                activation_event.wait(timeout=0.5)
                 continue
 
             # ---- Check timeout -------------------------------------------
-            if time.time() > _active_until:
+            if time.time() > _state["active_until"]:
                 logger.info("Activation timed out – returning to idle.")
-                _activation_event.clear()
+                activation_event.clear()
                 detector.resume()   # re-enable wake-word detection
                 continue
 
@@ -104,7 +107,7 @@ def main() -> None:
                 )
             except sr.WaitTimeoutError:
                 speak("I didn't hear anything. Going back to sleep – say my name to wake me.")
-                _activation_event.clear()
+                activation_event.clear()
                 detector.resume()
                 continue
 
@@ -120,7 +123,7 @@ def main() -> None:
             except sr.RequestError as exc:
                 speak("Speech recognition service is unavailable.")
                 logger.error("STT RequestError: %s", exc)
-                _activation_event.clear()
+                activation_event.clear()
                 detector.resume()
                 continue
 
@@ -131,8 +134,7 @@ def main() -> None:
                 break
 
             # Reset the activation window after a successful command
-            global _active_until
-            _active_until = time.time() + ACTIVATION_TIMEOUT
+            _state["active_until"] = time.time() + ACTIVATION_TIMEOUT
             detector.resume()
 
 

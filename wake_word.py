@@ -19,6 +19,7 @@ Usage::
 """
 
 import threading
+from typing import Callable, Optional
 
 import speech_recognition as sr
 
@@ -46,7 +47,7 @@ class WakeWordDetector:
     def __init__(
         self,
         wake_word: str = WAKE_WORD,
-        on_detected: callable = None,
+        on_detected: Optional[Callable[[], None]] = None,
         phrase_time_limit: int = 4,
     ) -> None:
         self.wake_word = wake_word.lower()

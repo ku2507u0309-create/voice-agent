@@ -97,7 +97,8 @@ def _detect_intent_claude(command: str) -> Optional[Tuple[str, Optional[str]]]:
         reply = message.content[0].text.strip()
         logger.debug("Claude reply: %s", reply)
         # Parse "INTENT: foo | DATA: bar"
-        match = re.match(r"INTENT:\s*(\w+)\s*\|\s*DATA:\s*(.*)", reply)
+        # Use [^|]* for data to avoid consuming extra pipes in the value
+        match = re.match(r"INTENT:\s*(\w+)\s*\|\s*DATA:\s*([^|]*)", reply)
         if match:
             intent = match.group(1).strip()
             data: Optional[str] = match.group(2).strip() or None
