@@ -1,0 +1,8 @@
+# Core dependencies
+SpeechRecognition>=3.10.0
+pyttsx3>=2.90
+
+# PyAudio is required by SpeechRecognition for microphone access.
+# On Windows, install via: pip install pyaudio
+# If that fails, use the pre-built wheel: https://www.lfd.uci.edu/~gohlke/pythonlibs/#pyaudio
+pyaudio>=0.2.13
