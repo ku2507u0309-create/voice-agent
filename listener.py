@@ -71,6 +71,7 @@ def listen(
     *,
     timeout: int = LISTEN_TIMEOUT,
     announce: bool = True,
+    calibrate: bool = False,
 ) -> str | None:
     """
     Capture a single utterance from *source* and return recognised text
@@ -86,11 +87,17 @@ def listen(
         Maximum seconds to wait for speech to begin.
     announce:
         When *True*, speaks "Listening…" before capturing audio.
+    calibrate:
+        When *True*, runs a brief ambient-noise calibration before listening.
+        Defaults to *False*; callers should calibrate once at startup via
+        ``recognizer.adjust_for_ambient_noise(source)`` rather than on every
+        call to avoid adding latency.
     """
     if announce:
         speak("Listening…")
     try:
-        recognizer.adjust_for_ambient_noise(source, duration=0.4)
+        if calibrate:
+            recognizer.adjust_for_ambient_noise(source, duration=0.4)
         audio = recognizer.listen(
             source, timeout=timeout, phrase_time_limit=PHRASE_TIME_LIMIT
         )

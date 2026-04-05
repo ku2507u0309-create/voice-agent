@@ -43,6 +43,7 @@ def main() -> None:
     recognizer = build_recognizer()
 
     with sr.Microphone() as source:
+        recognizer.adjust_for_ambient_noise(source, duration=1)
         while True:
             command = listen(recognizer, source)
             if command is None:

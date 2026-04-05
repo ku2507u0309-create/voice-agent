@@ -57,7 +57,7 @@ def _on_wake_word() -> None:
 
 def main() -> None:
     speak(
-        f"Hello! I am Nikol, your AI voice assistant. "
+        f"Hello! I am {WAKE_WORD.capitalize()}, your AI voice assistant. "
         f"Say '{WAKE_WORD}' to activate me, or say 'help' after waking me "
         f"to hear what I can do."
     )

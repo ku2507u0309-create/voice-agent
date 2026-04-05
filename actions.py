@@ -249,7 +249,6 @@ def restart_computer(speak: SpeakFn) -> None:
     except FileNotFoundError:
         speak("Restart command is not available on this system.")
 
-
 def open_settings(speak: SpeakFn) -> None:
     speak("Opening Windows Settings.")
     try:

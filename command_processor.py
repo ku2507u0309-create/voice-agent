@@ -97,11 +97,14 @@ def _detect_intent_claude(command: str) -> Optional[Tuple[str, Optional[str]]]:
         reply = message.content[0].text.strip()
         logger.debug("Claude reply: %s", reply)
         # Parse "INTENT: foo | DATA: bar"
-        # Use [^|]* for data to avoid consuming extra pipes in the value
+        # Use [^|]* for data to avoid consuming extra pipes; limit to 512 chars.
         match = re.match(r"INTENT:\s*(\w+)\s*\|\s*DATA:\s*([^|]*)", reply)
         if match:
             intent = match.group(1).strip()
-            data: Optional[str] = match.group(2).strip() or None
+            raw_data = match.group(2).strip()
+            # Sanitise: cap length and strip control characters
+            raw_data = raw_data[:512].strip()
+            data: Optional[str] = raw_data or None
             return intent, data
     except Exception as exc:  # noqa: BLE001
         logger.warning("Claude intent detection failed: %s", exc)

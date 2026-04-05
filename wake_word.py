@@ -60,8 +60,8 @@ class WakeWordDetector:
         self._recognizer.pause_threshold = PAUSE_THRESHOLD
 
         # Threading primitives
-        self._detected = threading.Event()   # set while waiting for reset
-        self._paused = threading.Event()     # set while main loop is active
+        self._detected = threading.Event()   # set when wake word is detected; cleared by reset()
+        self._paused = threading.Event()     # set to suppress callbacks (e.g. during command processing)
         self._stop_fn = None                 # stopper returned by listen_in_background
 
     # ------------------------------------------------------------------

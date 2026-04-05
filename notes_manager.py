@@ -51,7 +51,7 @@ def add_note(content: str) -> dict:
     content = content.strip()
     note = {
         "content": content,
-        "timestamp": datetime.datetime.now().isoformat(timespec="seconds"),
+        "timestamp": datetime.datetime.now(datetime.timezone.utc).isoformat(timespec="seconds"),
     }
     notes = _load()
     notes.append(note)
@@ -74,7 +74,9 @@ def get_notes_as_text() -> str:
     for i, note in enumerate(notes, start=1):
         try:
             dt = datetime.datetime.fromisoformat(note["timestamp"])
-            time_str = dt.strftime("%B %d at %I:%M %p")
+            # Convert to local time for a friendlier display
+            local_dt = dt.astimezone()
+            time_str = local_dt.strftime("%B %d at %I:%M %p")
         except (KeyError, ValueError):
             time_str = "unknown time"
         lines.append(f"Note {i}, saved on {time_str}: {note['content']}")
