@@ -10,7 +10,7 @@ Windows applications, manages system power, takes notes, and more — all hands-
 
 | Feature | Details |
 |---|---|
-| **Wake word** | Say **"Nikol"** to activate; the assistant stays idle until called |
+| **Wake word** | Say **"Kitty"** to activate; the assistant stays idle until called |
 | **Notes** | "Note this…" / "Remember this…" saves notes to `notes.json`; "Show my notes" reads them back |
 | **Natural-language commands** | "Let's code" → opens VS Code; "I want to watch something" → opens YouTube |
 | **Modular codebase** | Split into `config`, `logger`, `listener`, `wake_word`, `actions`, `command_processor`, `notes_manager`, `main` |
@@ -25,7 +25,7 @@ Windows applications, manages system power, takes notes, and more — all hands-
 
 | Voice Command | Action |
 |---|---|
-| `nikol` (wake word) | Activates the assistant for 10 seconds |
+| `kitty` (wake word) | Activates the assistant for 10 seconds |
 | `open youtube` / `I want to watch something` | Opens YouTube in the default browser |
 | `search youtube <query>` | Searches YouTube for the given query |
 | `open google` | Opens Google in the default browser |
@@ -94,7 +94,7 @@ pip install -r requirements.txt
 python main.py
 ```
 
-Say **"Nikol"** to wake the assistant, then speak your command.  
+Say **"Kitty"** to wake the assistant, then speak your command.  
 The assistant goes back to sleep after 10 seconds of inactivity.
 
 ### Backward-compatible mode (no wake word)
@@ -190,7 +190,7 @@ Edit `config.py` to customise the assistant:
 
 | Constant | Default | Description |
 |---|---|---|
-| `WAKE_WORD` | `"nikol"` | Wake word (lower-case) |
+| `WAKE_WORD` | `"kitty"` | Wake word (lower-case) |
 | `ACTIVATION_TIMEOUT` | `10` | Seconds active after wake word |
 | `TTS_RATE` | `170` | Speech rate (words per minute) |
 | `ENERGY_THRESHOLD` | `300` | Microphone sensitivity |

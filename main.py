@@ -4,7 +4,7 @@ main.py – Entry point for the enhanced AI Voice Agent.
 Architecture
 ------------
 * A :class:`~wake_word.WakeWordDetector` runs in a background daemon thread
-  and fires a threading.Event when "Nikol" (or the configured wake word) is
+  and fires a threading.Event when "Kitty" (or the configured wake word) is
   heard.
 * The main thread idles until that event fires, then switches into command
   mode: it listens for one utterance, processes it, and resets the activation

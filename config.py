@@ -10,7 +10,7 @@ import os
 # ---------------------------------------------------------------------------
 # Wake word
 # ---------------------------------------------------------------------------
-WAKE_WORD: str = "nikol"          # Lower-case; detection is case-insensitive
+WAKE_WORD: str = "kitty"          # Lower-case; detection is case-insensitive
 ACTIVATION_TIMEOUT: int = 10      # Seconds to stay active after wake word
 
 # ---------------------------------------------------------------------------
