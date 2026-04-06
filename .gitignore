@@ -18,3 +18,8 @@ build/
 # IDE
 .vscode/
 .idea/
+
+# Voice agent runtime files
+notes.json
+voice_agent.log
+voice_agent.log.*
